@@ -183,7 +183,7 @@ print('\27[0;33m>>'..[[
 ▄█████████▀   ▀██████▀   ▄████████▀   ▄████████▀  ¦ VERSION » v]]..version..[[
 
 -------------------------------------------------------------------
-									
+
 ]]..'\027[0;32m'
 ..'¦ TOKEN_BOT: \27[1;34m'..Token..'\027[0;32m\n'
 ..'¦ BOT__INFO: \27[1;34m'.. Bot_User..'\27[0;36m » ('..boss..')\027[0;32m\n'
@@ -268,8 +268,8 @@ print("Clener >>> ")
 redis:sadd(boss..":IdsMsgsCleaner:"..msg.chat_id_,msg.id_)
 Timerr = redis:get(boss..':Timer_Cleaner:'..msg.chat_id_)
 if Timerr then 
-    Timerr = tonumber(Timerr)
-    Timerr = 60*60*Timerr
+Timerr = tonumber(Timerr)
+Timerr = 60*60*Timerr
 end
 redis:setex(boss..":SetTimerCleaner:"..msg.chat_id_..msg.id_,Timerr or 21600,true)  
 end
