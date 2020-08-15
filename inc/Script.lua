@@ -1367,6 +1367,13 @@ redis:set(boss..'num_msg_max'..msg.chat_id_,MsgText[2])
 return "📡*¦* تم وضع التكرار » { *"..MsgText[2].."* }"
 end
 
+if MsgText[1] == "ضع وقت التنظيف" then
+if not msg.Creator then return "📛*¦* هذا الامر يخص {المطور,المنشئ,المدير} فقط  \n🚶" end
+local NumLoop = tonumber(MsgText[2])
+redis:set(boss..':Timer_Cleaner:'..msg.chat_id_,NumLoop) 
+return "📡*¦* تم وضع وقت التنظيف » { *"..MsgText[2].."* } ساعه"
+end
+
 if MsgText[1] == "مسح" then
 if not MsgText[2] and msg.reply_id then 
 if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
@@ -4623,6 +4630,7 @@ return false
 end
 
 if msg.edited and not msg.SuperCreator and redis:get(boss.."antiedit"..msg.chat_id_) then 
+if not msg.text then
 GetUserID(msg.sender_user_id_,function(arg,data)
 msg = arg.msg 
 local usersmnc   = ""
@@ -4643,7 +4651,7 @@ Rwers = "فيديو"
 elseif msg.content_.ID == "MessageAnimation"  then
 Rwers = "متحركه"
 else
-Rwers = "نصي"
+Rwers = "نصي رابط"
 end
 if #monsha ~= 0 then 
 for k,v in pairs(monsha) do
@@ -4655,6 +4663,37 @@ return sendMsg(msg.chat_id_,msg.id_,"📢¦ نداء لمنشئيين : ["..user
 
 end,{msg=msg})
 Del_msg(msg.chat_id_,msg.id_)
+end
+if (msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") 
+or msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") 
+or msg.text:match("[Tt].[Mm][Ee]/") 
+or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/") 
+or msg.text:match(".[Pp][Ee]") 
+or msg.text:match("[Hh][Tt][Tt][Pp][Ss]://") 
+or msg.text:match("[Hh][Tt][Tt][Pp]://") 
+or msg.text:match("[Ww][Ww][Ww].") 
+or msg.text:match(".[Cc][Oo][Mm]")) 
+  then
+GetUserID(msg.sender_user_id_,function(arg,data)
+msg = arg.msg 
+local usersmnc   = ""
+local NameUser   = Hyper_Link_Name(data)
+if data.username_  then uuseri = "\n🔬¦ معرفه : @["..data.username_.."]"  else uuseri = "" end
+local monsha = redis:smembers(boss..':MONSHA_Group:'..msg.chat_id_)
+
+Rwers = "نصي رابط"
+
+if #monsha ~= 0 then 
+for k,v in pairs(monsha) do
+local info = redis:hgetall(boss..'username:'..v) if info and info.username and info.username:match("@[%a%d_]+") then usersmnc = usersmnc..info.username.." - " end
+sendMsg(v,0,"📇¦ هناك شخص قام بالتعديل \n👲🏼¦ الاسم : ⋙「 "..NameUser.." 」 "..uuseri.."\n🀄️¦ الايدي : `"..msg.sender_user_id_.."`\n📬¦ رتبته : "..Getrtba(msg.sender_user_id_,msg.chat_id_).."\n🔌¦ نوع التعديل : "..Rwers.."\n📱¦ المجموعة : "..Flter_Markdown((redis:get(boss..'group:name'..msg.chat_id_) or '')).."\n🔅¦ الرابط : "..redis:get(boss..'linkGroup'..msg.chat_id_).." \n🚸" )
+end
+end
+return sendMsg(msg.chat_id_,msg.id_,"📢¦ نداء لمنشئيين : ["..usersmnc.."] \n📇¦ هناك شخص قام بالتعديل"..uuseri.."\n👲🏼¦ الاسم : ⋙「 "..NameUser.." 」 \n🀄️¦ الايدي : `"..msg.sender_user_id_.."`\n📬¦ رتبته : "..Getrtba(msg.sender_user_id_,msg.chat_id_).."\n🔌¦ نوع التعديل : "..Rwers.."\n🚸" )   
+
+end,{msg=msg})
+Del_msg(msg.chat_id_,msg.id_)
+end
 end
 
 
@@ -5591,6 +5630,7 @@ Boss = {
 '^(تنزيل المدير) (%d+)$',
 '^(تنزيل مدير) (%d+)$',
 '^(ضع تكرار) (%d+)$',
+'^(ضع وقت التنظيف) (%d+)$',
 "^(مسح)$",
 "^(مسح) (.+)$",
 '^(منع) (.+)$',
