@@ -266,7 +266,12 @@ or msg.content_.ID == "MessageUnsupported")
 and redis:get(boss.."lock_cleaner"..msg.chat_id_) then
 print("Clener >>> ")
 redis:sadd(boss..":IdsMsgsCleaner:"..msg.chat_id_,msg.id_)
-redis:setex(boss..":SetTimerCleaner:"..msg.chat_id_..msg.id_,21600,true)  
+Timerr = redis:get(boss..':Timer_Cleaner:'..msg.chat_id_)
+if Timerr then 
+    Timerr = tonumber(Timerr)
+    Timerr = 60*60*Timerr
+end
+redis:setex(boss..":SetTimerCleaner:"..msg.chat_id_..msg.id_,Timerr or 21600,true)  
 end
 
 
