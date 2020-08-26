@@ -775,6 +775,7 @@ if not MsgText[2] and msg.reply_id then
 GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
 if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"📛*¦* عذرا هذا العضو ليس موجود ضمن المجموعات \n❕") end
 local UserID = data.sender_user_id_
+if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"👤*¦* لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n📛") end
 GetUserID(UserID,function(arg,data)
 if msg.SudoBase then redis:srem(boss..'gban_users',arg.UserID)  end 
 Restrict(arg.ChatID,arg.UserID,2)
@@ -790,6 +791,7 @@ elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then
 GetUserName(MsgText[2],function(arg,data)
 if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"📛*¦* لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n❕") end 
 local UserID = data.id_
+if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"👤*¦* لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n📛") end
 if msg.SudoBase then redis:srem(boss..'gban_users',UserID)  end 
 Restrict(arg.ChatID,UserID,2)
 redis:srem(boss..'banned:'..arg.ChatID,UserID)
@@ -4673,7 +4675,7 @@ or msg.text:match("[Hh][Tt][Tt][Pp][Ss]://")
 or msg.text:match("[Hh][Tt][Tt][Pp]://") 
 or msg.text:match("[Ww][Ww][Ww].") 
 or msg.text:match(".[Cc][Oo][Mm]")) 
-  then
+then
 GetUserID(msg.sender_user_id_,function(arg,data)
 msg = arg.msg 
 local usersmnc   = ""
