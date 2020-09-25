@@ -1347,7 +1347,7 @@ end
 
 if MsgText[1] == "ضع القوانين" then
 if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
-redis:setex(boss..'rulse:witting'..msg.chat_id_..msg.sender_user_id_,300,true)
+redis:setex(boss..'rulse:witting'..msg.sender_user_id_,300,true)
 return '📭¦ حسننا عزيزي  ✋🏿\n🗯¦ الان ارسل القوانين  للمجموعه 🍃'
 end
 
@@ -1535,7 +1535,7 @@ end
 
 if MsgText[1] == "ضع اسم" then
 if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
-redis:set(boss..'welcom:witting'..msg.chat_id_..msg.sender_user_id_,true) 
+redis:setex(boss..'name:witting'..msg.chat_id_..msg.sender_user_id_,300,true)
 return "📭¦ حسننا عزيزي  ✋🏿\n🗯¦ الان ارسل الاسم  للمجموعه \n🛠"
 end
 
@@ -2934,11 +2934,10 @@ if MsgText[1] == "رتبتي" then return '🎫*¦* رتبتك » '..msg.TheRank
 ----------------- استقبال الرسائل ---------------
 if MsgText[1] == "الغاء الامر ✖️" or MsgText[1] == "الغاء" then
 if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
-redis:del(boss..'welcom:witting'..msg.sender_user_id_,
-boss..'rulse:witting'..msg.sender_user_id_,
-boss..'rulse:witting'..msg.sender_user_id_,
-boss..'name:witting'..msg.sender_user_id_,
-boss..'about:witting'..msg.sender_user_id_,
+redis:del(boss..'welcom:witting'..msg.chat_id_..msg.sender_user_id_,
+boss..'rulse:witting'..msg.chat_id_..msg.sender_user_id_,
+boss..'name:witting'..msg.chat_id_..msg.sender_user_id_,
+boss..'about:witting'..msg.chat_id_..msg.sender_user_id_,
 boss..'fwd:all'..msg.sender_user_id_,
 boss..'fwd:pv'..msg.sender_user_id_,
 boss..'fwd:groups'..msg.sender_user_id_,
@@ -4321,22 +4320,22 @@ redis:del(boss..'text_sudo:witting'..msg.sender_user_id_)
 redis:set(boss..':TEXT_SUDO',Flter_Markdown(msg.text))
 return sendMsg(msg.chat_id_,msg.id_, "📜*¦* تم وضع الكليشه بنجاح كلاتي 👋🏻\n\n*{*  "..Flter_Markdown(msg.text).."  *}*\n✓")
 end
-if redis:get(boss..'welcom:witting'..msg.sender_user_id_) then -- استقبال كليشه الترحيب
-redis:del(boss..'welcom:witting'..msg.sender_user_id_) 
+if redis:get(boss..'welcom:witting'..msg.chat_id_..msg.sender_user_id_) then -- استقبال كليشه الترحيب
+redis:del(boss..'welcom:witting'..msg.chat_id_..msg.sender_user_id_) 
 redis:set(boss..'welcome:msg'..msg.chat_id_,msg.text)
 return sendMsg(msg.chat_id_,msg.id_,"📜*¦* تم وضع الترحيب بنجاح كلاتي 👋\n✓" )
 end
-if redis:get(boss..'rulse:witting'..msg.sender_user_id_) then --- استقبال القوانين
-redis:del(boss..'rulse:witting'..msg.sender_user_id_) 
+if redis:get(boss..'rulse:witting'..msg.chat_id_..msg.sender_user_id_) then --- استقبال القوانين
+redis:del(boss..'rulse:witting'..msg.chat_id_..msg.sender_user_id_) 
 redis:set(boss..'rulse:msg'..msg.chat_id_,Flter_Markdown(msg.text)) 
 return sendMsg(msg.chat_id_,msg.id_,'📜*¦* مرحبآ عزيزي\n📦¦ تم حفظ القوانين بنجاح ✓\n🔖¦ ارسل [[ القوانين ]] لعرضها \n🛑✓')
 end
-if redis:get(boss..'name:witting'..msg.sender_user_id_) then --- استقبال الاسم
-redis:del(boss..'name:witting'..msg.sender_user_id_) 
+if redis:get(boss..'name:witting'..msg.chat_id_..msg.sender_user_id_) then --- استقبال الاسم
+redis:del(boss..'name:witting'..msg.chat_id_..msg.sender_user_id_) 
 tdcli_function({ID= "ChangeChatTitle",chat_id_=msg.chat_id_,title_=msg.text},dl_cb,nil)
 end
-if redis:get(boss..'about:witting'..msg.sender_user_id_) then --- استقبال الوصف
-redis:del(boss..'about:witting'..msg.sender_user_id_) 
+if redis:get(boss..'about:witting'..msg.chat_id_..msg.sender_user_id_) then --- استقبال الوصف
+redis:del(boss..'about:witting'..msg.chat_id_..msg.sender_user_id_) 
 tdcli_function({ID="ChangeChannelAbout",channel_id_=msg.chat_id_:gsub('-100',''),about_ = msg.text},function(arg,data) 
 if data.ID == "Ok" then 
 return sendMsg(msg.chat_id_,msg.id_,"📜*¦* تم وضع الوصف بنجاح\n✓")
