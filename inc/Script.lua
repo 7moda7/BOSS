@@ -1347,7 +1347,7 @@ end
 
 if MsgText[1] == "ضع القوانين" then
 if not msg.Admin then return "📛*¦* هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n🚶" end
-redis:setex(boss..'rulse:witting'..msg.sender_user_id_,300,true)
+redis:setex(boss..'rulse:witting'..msg.chat_id_..msg.sender_user_id_,300,true)
 return '📭¦ حسننا عزيزي  ✋🏿\n🗯¦ الان ارسل القوانين  للمجموعه 🍃'
 end
 
