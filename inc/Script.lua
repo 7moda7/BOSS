@@ -1515,7 +1515,7 @@ end
 if MsgText[2] == "الرسائل المجدوله" or MsgText[2] == "الميديا" or MsgText[2] == "الوسائط" then 
 if not msg.Creator then return "📪¦ هذا الامر يخص {المطور,المنشئ} فقط  \n" end
 local mmezz = redis:smembers(boss..":IdsMsgsCleaner:"..msg.chat_id_)
-if #mmezz == 0 then return "📮¦ امر التنظيف معطل من قبل المنشئ الاساسي" end
+if #mmezz == 0 then return "📮¦ لا يوجد وسائط مجدوله للحذف او \n امر التنظيف تم تعطيله من قبل المنشئ الاساسي " end
 for k,v in pairs(mmezz) do
 Del_msg(msg.chat_id_,v)
 end
@@ -2860,7 +2860,6 @@ end
 
 if MsgText[1] == "اذاعه بالتثبيت"  or MsgText[1] =="اذاعه بالتثبيت 📬" then
 if not msg.SudoUser then return"📪¦ هذا الامر يخص {المطور} فقط  \n" end
-if not msg.SudoBase and not redis:get(boss..'lock_brod') then return "📡*¦* الاذاعه مقفوله من قبل المطور الاساسي  🚶" end
 redis:setex(boss..':prod_pin:'..msg.chat_id_..msg.sender_user_id_,300, true) 
 return "📭¦ حسننا الان ارسل رساله ليتم اذاعتها بالتثبيت  \n🔛" 
 end
