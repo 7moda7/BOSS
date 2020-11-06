@@ -350,7 +350,7 @@ if UserID == our_id then
 return sendMsg(msg.chat_id_,msg.id_,"👤*¦* لا يمكنك تقييد البوت\n🛠") 
 elseif UserID == "819385837" or UserID == "60809019" then 
 return sendMsg(msg.chat_id_,msg.id_,"⚜️*¦* لا يمكنك تقييد مطور السورس\n🛠") 
-elseif UserID == SUDO_ID then 
+elseif UserID == tostring(SUDO_ID) then 
 return sendMsg(msg.chat_id_,msg.id_,"👤*¦* لا يمكنك تقييد المطور الاساسي\n🛠") 
 elseif redis:sismember(boss..':SUDO_BOT:',UserID) then 
 return sendMsg(msg.chat_id_,msg.id_,"👤*¦* لا يمكنك تقييد المطور\n🛠") 
